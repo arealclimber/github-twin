@@ -1,0 +1,6 @@
+pymongo
+pydantic
+pydantic_settings
+aws_lambda_powertools
+selenium
+beautifulsoup4
