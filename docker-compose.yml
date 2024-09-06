@@ -1,17 +1,3 @@
-# version: "3.8"
-
-# services:
-#   mongo:
-#     image: mongo:5
-#     container_name: github-twin-mongo
-#     ports:
-#       - "27017:27017"
-#     volumes:
-#       - mongo-data:/data/db
-
-# volumes:
-#   mongo-data:
-
 # Info: no keyfile used for mongodb replica set
 version: "3.8"
 

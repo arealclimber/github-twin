@@ -4,3 +4,5 @@ pydantic_settings
 aws_lambda_powertools
 selenium
 beautifulsoup4
+aws_lambda_powertools
+structlog

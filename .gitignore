@@ -1,3 +1,4 @@
 .env
 mongo-keyfile
 __pycache__/
+data-crawling.zip
