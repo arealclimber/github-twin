@@ -1,5 +1,7 @@
 - [Data crawling](#data-crawling)
 - [Local](#local)
+  - [刪掉 mongodb 的資料 (Docker)](#刪掉-mongodb-的資料-docker)
+  - [檢查 rabbitmq 的情況 (Docker)](#檢查-rabbitmq-的情況-docker)
   - [如果本地的 Python 連線 MongoDB cluster 失敗](#如果本地的-python-連線-mongodb-cluster-失敗)
 
 # Data crawling
@@ -21,7 +23,6 @@ docker compose ps
 docker compose logs
 
 # Connect to the main node of the MongoDB replica set to check if it's initiated
-
 docker exec -it github-twin-mongo1 mongo --port 30001
 
 # in mongodb shell, run:
@@ -37,6 +38,73 @@ rs.initiate({
   ]
 })
 
+```
+
+## 刪掉 mongodb 的資料 (Docker)
+
+- 透過 `rs.status()` 可以看到主節點，如果要刪數據，需要將 table plus 連到主節點，才可以在 table plus 上刪除
+
+  - 例如 `"syncSourceHost" : "mongo3:30003",`，代表 table plus 的 URL 需改成 `mongodb://localhost:30003`
+
+- 進到 MongoDB 主節點，將所有 scrabble 的 posts table 資料刪掉
+
+```bash
+docker exec -it github-twin-mongo1 mongo --port 30001
+
+# 查看主節點
+rs.status()
+
+# 如果主節點不是 30001 ，則需要切換到主節點，例如得知 `"syncSourceHost" : "mongo3:30003",`，則退出重新進 mongo3 的容器
+exit
+docker exec -it github-twin-mongo3 mongo --port 30003
+
+# # 切換到主節點
+# rs.switchToHost("mongo1:30001")
+
+use scrabble
+db.posts.deleteMany({})
+```
+
+- 刪除成功的話，會得到以下 log
+
+```
+my-replica-set:PRIMARY> use scrabble
+switched to db scrabble
+my-replica-set:PRIMARY> db.posts.deleteMany({})
+{ "acknowledged" : true, "deletedCount" : 6901 }
+```
+
+## 檢查 rabbitmq 的情況 (Docker)
+
+- 執行 `docker compose up -d` 後，可以在 `http://localhost:15673` 看到 rabbitmq 的 web ui，根據 data-ingestion/config.py 的 RABBITMQ_DEFAULT_USERNAME 和 RABBITMQ_DEFAULT_PASSWORD 登入後，可以看到 queue 的狀況
+
+- 進到 rabbitmq 的 container
+
+```bash
+docker exec -it github-twin-mq bash
+```
+
+```bash
+# 查看 queue
+rabbitmqctl list_queues
+
+# 查看 rabbitmq 的 status
+rabbitmqctl status
+
+# 查看 rabbitmq 的 cluster 的 status
+rabbitmqctl cluster_status
+
+# 查看 rabbitmq 的連線
+rabbitmqctl list_connections
+
+# 查看 rabbitmq 的節點
+rabbitmqctl node_health_check
+
+# 查看 rabbitmq 的消費者
+rabbitmqctl list_consumers
+
+# 查看 rabbitmq 的 vhost
+rabbitmqctl list_vhosts
 ```
 
 ## 如果本地的 Python 連線 MongoDB cluster 失敗
