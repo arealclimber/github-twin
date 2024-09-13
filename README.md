@@ -1,4 +1,4 @@
 - 主要啟發自 [decodingml/llm-twin-course](https://github.com/decodingml/llm-twin-course) 跟 [llm-twin-course](https://medium.com/decodingml/an-end-to-end-framework-for-production-ready-llm-systems-by-building-your-llm-twin-2cc6bb01141f)，透過實作自己的 GitHub 分身去學習 Machine Learning Operations。以本地端開發優先，再來是透過 Docker 將服務容器化，最後部署到雲平台上，實現機器學習自動化。
 - 詳細實作步驟跟心得可參考各資料夾底下的 README.md
-  - [Data crawling](./data-crawling/README.md)
-  - [Data ingestion](./data-ingestion/README.md)
+  - [Data crawling](./data-crawling)
+  - [Data ingestion](./data-ingestion)
