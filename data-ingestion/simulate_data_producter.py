@@ -19,17 +19,18 @@ def main():
     uri = "mongodb://mongo1:30001,mongo2:30002,mongo3:30003/?replicaSet=my-replica-set"
     database_name = "scrabble"
     collection_name = "posts"
+    data_per_second = 10 # 每秒寫入 n 筆資料
 
     try:
         while True:
-            for _ in range(10):
+            for _ in range(data_per_second):
                 data = {
                     "platform": "github",
                     "content": "Test issue content",
                     "timestamp": datetime.now().strftime("%H:%M:%S")
                 }
                 insert_data_to_mongodb(uri, database_name, collection_name, data)
-            time.sleep(1)  # 每秒寫入 300 筆資料
+            time.sleep(1)
     except KeyboardInterrupt:
         print("Data production stopped.")
 

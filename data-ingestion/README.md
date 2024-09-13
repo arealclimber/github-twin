@@ -7,7 +7,7 @@
 
 - 執行 `docker compose up -d` 後，可以在 `http://localhost:15673` 看到 rabbitmq 的 web ui，根據 data-ingestion/config.py 的 RABBITMQ_DEFAULT_USERNAME 和 RABBITMQ_DEFAULT_PASSWORD 登入後，可以看到 queue 的狀況
 
-- 進到 rabbitmq 的 container
+- 進到運行 RabbitMQ 的 container `docker exec -it <rabbitmq-container-name> bash`
 
 ```bash
 docker exec -it github-twin-mq bash
@@ -34,4 +34,10 @@ rabbitmqctl list_consumers
 
 # 查看 rabbitmq 的 vhost
 rabbitmqctl list_vhosts
+```
+
+- 清空 queue `rabbitmqctl purge_queue <queue-name>`
+
+```bash
+rabbitmqctl purge_queue default
 ```
