@@ -1,19 +1,17 @@
 - [Data crawling](#data-crawling)
-- [Local](#local)
+- [在本地端運行 MongoDB replica set](#在本地端運行-mongodb-replica-set)
   - [刪掉 mongodb 的資料 (Docker)](#刪掉-mongodb-的資料-docker)
-  - [檢查 rabbitmq 的情況 (Docker)](#檢查-rabbitmq-的情況-docker)
   - [如果本地的 Python 連線 MongoDB cluster 失敗](#如果本地的-python-連線-mongodb-cluster-失敗)
 
 # Data crawling
 
-# Local
+# 在本地端運行 MongoDB replica set
 
 ```bash
 # Run docker compose
 docker compose up -d
 
 # Run the docker container and monitor the logs
-
 docker-compose up --build
 
 # Check the status of the containers
@@ -72,39 +70,6 @@ my-replica-set:PRIMARY> use scrabble
 switched to db scrabble
 my-replica-set:PRIMARY> db.posts.deleteMany({})
 { "acknowledged" : true, "deletedCount" : 6901 }
-```
-
-## 檢查 rabbitmq 的情況 (Docker)
-
-- 執行 `docker compose up -d` 後，可以在 `http://localhost:15673` 看到 rabbitmq 的 web ui，根據 data-ingestion/config.py 的 RABBITMQ_DEFAULT_USERNAME 和 RABBITMQ_DEFAULT_PASSWORD 登入後，可以看到 queue 的狀況
-
-- 進到 rabbitmq 的 container
-
-```bash
-docker exec -it github-twin-mq bash
-```
-
-```bash
-# 查看 queue
-rabbitmqctl list_queues
-
-# 查看 rabbitmq 的 status
-rabbitmqctl status
-
-# 查看 rabbitmq 的 cluster 的 status
-rabbitmqctl cluster_status
-
-# 查看 rabbitmq 的連線
-rabbitmqctl list_connections
-
-# 查看 rabbitmq 的節點
-rabbitmqctl node_health_check
-
-# 查看 rabbitmq 的消費者
-rabbitmqctl list_consumers
-
-# 查看 rabbitmq 的 vhost
-rabbitmqctl list_vhosts
 ```
 
 ## 如果本地的 Python 連線 MongoDB cluster 失敗
